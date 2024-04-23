@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restoran Korea</title>
+    <style>
+        body {
+            font-family: italy;
+            margin: 0;
+            padding: 0;
+            background-color: #af687e;
+        }
+        header {
+            background-color: #f1c4b1;
+            color: #732626;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #f3dfdf;
+            text-decoration: none;
+            padding: 10px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        section {
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .menu-item {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #d2d2d2;
+            color: #732626;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #b3b3b3;
+        }
+        .btn-send {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-send:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Restoran Korea</h1>
+</header>
+
+<nav>
+    <a href="#booking">Pemesanan</a>
+    <a href="#menu">Menu</a>
+    <a href="#about">Tentang Kami</a>
+    <a href="#contact">Kontak</a>
+</nav>
+
+<section id="booking">
+    <h2>Isi Detail Pemesanan</h2>
+    <form id="booking-form" onsubmit="return false;">
+        <label for="name">Nama Pelanggan:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="booking-number">Nomor Booking:</label><br>
+        <input type="text" id="booking-number" name="booking-number"><br><br>
+        <button onclick="startOrder()">Mulai Pemesanan</button>
+    </form>
+</section>
+
+<section id="menu" style="display: none;">
+    <h2>Menu</h2>
+    <div class="menu-item">
+        <span>Jjajangmyeon - Rp 25.000</span>
+        <button onclick="addItem('Jjajangmyeon', 25000)">Pilih</button>
+    </div>
+    <div class="menu-item">
+        <span>Dakbal - Rp 40.000</span>
+        <button onclick="addItem('Dakbal', 40000)">Pilih</button>
+    </div>
+    <div class="menu-item">
+        <span>Rapokki - Rp 30.000</span>
+        <button onclick="addItem('Rapokki', 30000)">Pilih</button>
+    </div>
+    <div class="menu-item">
+        <span>Tteokbokki - Rp 25.000</span>
+        <button onclick="addItem('Tteokbokki', 25000)">Pilih</button>
+    </div>
+    <div class="menu-item">
+        <span>Soju - Rp 15.000</span>
+        <button onclick="addItem('Soju', 15000)">Pilih</button>
+    </div>
+    <div class="menu-item">
+        <span>Sparkling water - Rp 10.000</span>
+        <button onclick="addItem('Sparkling water', 10000)">Pilih</button>
+    </div>
+</section>
+
+<section id="about" style="display: none;">
+    <h2>About us</h2>
+    <p>ANYONGHASEOO!,Selamat datang di restoran kami yang menyajikan hidangan khas negara gingseng lohh. 
+        Dari Jjajangmyeon yang segar dan pedas hingga Tteokbokki yang lembut dan nikmat, setiap hidangan adalah keajaiban rasa.
+        banyak pilihan dengan harga terjangkau. Selamat mecoba^^
+    </p>
+</section>
+
+<section id="contact" style="display: none;">
+    <h2>Contact</h2>
+    <p>Jl. Serayu No. 123, Kota Bekasi</p>
+    <p>Telp: 123-456-789</p>
+    <p>Email: info@restorankorea.com</p>
+</section>
+
+<section id="order" style="display: none;">
+    <h2>Pesanan Anda</h2>
+    <ul id="order-list">
+    </ul>
+    <p id="total">Total: Rp 0</p>
+    <button onclick="resetOrder()">Reset</button>
+</section>
+
+<footer style="display: none;">
+    <p>Hak Cipta &copy; 2024 Restoran Korea</p>
+</footer>
+
+<script>
+    let order = [];
+    let total = 0;
+
+    function startOrder() {
+        const name = document.getElementById("name").value;
+        const bookingNumber = document.getElementById("booking-number").value;
+        if (name.trim() === "" || bookingNumber.trim() === "") {
+            alert("Mohon isi semua kolom!");
+            return;
+        }
+        document.getElementById("booking").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+        document.getElementById("about").style.display = "block";
+        document.getElementById("contact").style.display = "block";
+        document.getElementById("order").style.display = "block";
+        document.getElementById("footer").style.display = "block";
+    }
+
+    function addItem(item, price) {
+        order.push({ item: item, price: price });
+        total += price;
+        updateOrderList();
+        updateTotal();
+    }
+
+    function updateOrderList() {
+        const orderList = document.getElementById("order-list");
+        orderList.innerHTML = "";
+        order.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.item} - Rp ${item.price}`;
+            orderList.appendChild(li);
+        });
+    }
+
+    function updateTotal() {
+        const totalElement = document.getElementById("total");
+        totalElement.textContent = `Total: Rp ${total}`;
+    }
+
+    function resetOrder() {
+        order = [];
+        total = 0;
+        updateOrderList();
+        updateTotal();
+    }
+</script>
+
+</body>
+</html>
